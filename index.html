@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#07100d" />
+    <meta name="description" content="ローカルで動く個人移動データ可視化ダッシュボード" />
+    <title>Life Atlas</title>
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="loading" class="loading-screen" role="status" aria-live="polite">
+      <div class="loading-line"><span></span></div>
+      <p>移動データを読み込んでいます</p>
+    </div>
+
+    <div id="app" class="app-shell" hidden>
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-name">Life Atlas</div>
+          <div id="header-period" class="brand-period">期間を計算中</div>
+        </div>
+        <div class="header-actions">
+          <span class="privacy-label">LOCAL ROUTES</span>
+          <button id="theme-toggle" class="quiet-button" type="button" aria-label="表示テーマを切り替える">Light</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-rail" aria-label="データ絞り込み">
+          <section class="rail-section summary-section">
+            <h1>移動の輪郭</h1>
+            <p class="section-lead">Google Timelineの推定記録を、場所の名前を出さずに眺めます。</p>
+            <div class="metric-grid" aria-label="期間内の集計">
+              <div class="metric">
+                <span id="metric-distance" class="metric-value">0</span>
+                <span class="metric-unit">km</span>
+                <span class="metric-label">推定移動距離</span>
+              </div>
+              <div class="metric">
+                <span id="metric-places" class="metric-value">0</span>
+                <span class="metric-unit">地点</span>
+                <span class="metric-label">訪問場所</span>
+              </div>
+              <div class="metric">
+                <span id="metric-hours" class="metric-value">0</span>
+                <span class="metric-unit">時間</span>
+                <span class="metric-label">移動として記録</span>
+              </div>
+              <div class="metric">
+                <span id="metric-days" class="metric-value">0</span>
+                <span class="metric-unit">日</span>
+                <span class="metric-label">表示期間</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="rail-section range-section">
+            <div class="section-heading-row">
+              <h2>期間</h2>
+              <button id="range-reset" class="text-button" type="button">全期間</button>
+            </div>
+            <div class="range-labels">
+              <time id="range-start-label">-</time>
+              <span>から</span>
+              <time id="range-end-label">-</time>
+            </div>
+            <div class="dual-range" aria-label="表示期間">
+              <div class="range-track"><div id="range-fill" class="range-fill"></div></div>
+              <input id="range-start" type="range" min="0" max="300" value="0" aria-label="開始日" />
+              <input id="range-end" type="range" min="0" max="300" value="300" aria-label="終了日" />
+            </div>
+            <div class="preset-row" aria-label="期間プリセット">
+              <button type="button" data-range-days="30">30日</button>
+              <button type="button" data-range-days="90">90日</button>
+              <button type="button" data-range-days="180">180日</button>
+            </div>
+          </section>
+
+          <section class="rail-section mode-section">
+            <div class="section-heading-row">
+              <h2>移動手段</h2>
+              <button id="modes-all" class="text-button" type="button">すべて</button>
+            </div>
+            <div id="mode-filters" class="mode-filters"></div>
+          </section>
+
+          <section class="rail-section quality-section">
+            <h2>読み方</h2>
+            <p>距離と移動手段はGoogleの推定です。長時間の区間や飛び値は、そのまま事実とは限りません。</p>
+            <p class="privacy-copy">軌跡はブラウザ内で描画します。背景地図のみOpenStreetMap/CARTOから取得し、解析APIや位置検索は使いません。</p>
+          </section>
+        </aside>
+
+        <section class="map-panel" aria-label="移動マップ">
+          <div class="map-toolbar">
+            <div class="view-tabs" role="group" aria-label="地図表示">
+              <button class="view-tab is-active" type="button" data-view="routes" aria-pressed="true">軌跡</button>
+              <button class="view-tab" type="button" data-view="heat" aria-pressed="false">滞在密度</button>
+              <button class="view-tab" type="button" data-view="places" aria-pressed="false">頻出地点</button>
+            </div>
+            <div class="map-actions" role="group" aria-label="地図操作">
+              <button id="zoom-out" type="button" aria-label="縮小">−</button>
+              <button id="zoom-in" type="button" aria-label="拡大">+</button>
+              <button id="map-reset" type="button">全体</button>
+            </div>
+          </div>
+          <div id="map-wrap" class="map-wrap">
+            <div id="real-map" role="application" aria-label="実地図上の移動経路"></div>
+            <div id="map-empty" class="map-empty" hidden>
+              <strong>この条件では記録がありません</strong>
+              <span>期間か移動手段を広げてください。</span>
+            </div>
+            <div class="map-caption">
+              <div id="map-legend" class="map-legend"></div>
+              <span id="visible-count">0区間を表示</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="insight-rail" aria-label="分析">
+          <section class="insight-section">
+            <div class="section-heading-row">
+              <h2>移動構成</h2>
+              <span id="breakdown-total" class="section-number">0 km</span>
+            </div>
+            <div id="mode-breakdown" class="breakdown-list"></div>
+          </section>
+
+          <section class="insight-section journey-section">
+            <div class="section-heading-row">
+              <h2>長距離区間</h2>
+              <span class="section-note">上位5件</span>
+            </div>
+            <div id="journey-list" class="journey-list"></div>
+          </section>
+
+          <section id="selection-panel" class="insight-section selection-section" hidden>
+            <div class="section-heading-row">
+              <h2>選択中</h2>
+              <button id="selection-close" class="text-button" type="button">閉じる</button>
+            </div>
+            <div id="selection-content"></div>
+          </section>
+        </aside>
+      </main>
+
+      <section class="analysis-band" aria-label="時系列分析">
+        <div class="chart-section month-section">
+          <div class="chart-heading">
+            <div>
+              <h2>月ごとの移動</h2>
+              <p>距離の大きい月と移動手段の偏りを確認できます。</p>
+            </div>
+            <span id="month-highlight" class="chart-highlight">-</span>
+          </div>
+          <canvas id="month-chart" aria-label="月別移動距離グラフ"></canvas>
+        </div>
+
+        <div class="chart-section rhythm-section">
+          <div class="chart-heading">
+            <div>
+              <h2>動いていた時間</h2>
+              <p>曜日と時間帯ごとの移動記録です。</p>
+            </div>
+            <span class="chart-highlight">JST</span>
+          </div>
+          <div id="rhythm-chart" class="rhythm-chart" role="img" aria-label="曜日と時間帯別の移動時間ヒートマップ"></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span id="source-summary">データを確認中</span>
+        <span>座標は約10m単位に丸めたローカル派生データです。</span>
+        <span>Basemap © OpenStreetMap © CARTO</span>
+      </footer>
+    </div>
+
+    <div id="error-state" class="error-state" hidden role="alert">
+      <strong>データを表示できませんでした</strong>
+      <p id="error-message">location-data.jsonを確認してください。</p>
+      <button type="button" onclick="window.location.reload()">再読み込み</button>
+    </div>
+
+    <noscript>この画面はJavaScriptを有効にすると表示できます。</noscript>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

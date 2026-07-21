@@ -1,0 +1,19 @@
+# Private and generated location data
+data/*.json
+!data/location-data.example.json
+public/
+
+# Local deployment and secrets
+wrangler.jsonc
+.access-token
+.dev.vars*
+!.dev.vars.example
+.env*
+.wrangler/
+
+# Dependencies and generated files
+node_modules/
+__pycache__/
+*.pyc
+*.cpuprofile
+.DS_Store

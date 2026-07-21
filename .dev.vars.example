@@ -1,0 +1,2 @@
+AUTH_PASSWORD=<local-test-password>
+SESSION_SECRET=<at-least-32-random-characters>

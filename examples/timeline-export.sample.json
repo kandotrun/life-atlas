@@ -1,0 +1,116 @@
+[
+  {
+    "startTime": "2026-01-15T00:00:00Z",
+    "endTime": "2026-01-15T00:30:00Z",
+    "visit": {
+      "topCandidate": {
+        "placeLocation": "geo:35.6812,139.7671",
+        "placeID": "synthetic:tokyo-station",
+        "semanticType": "Unknown",
+        "probability": 0.98
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T00:30:00Z",
+    "endTime": "2026-01-15T01:00:00Z",
+    "activity": {
+      "start": "geo:35.6812,139.7671",
+      "end": "geo:35.6852,139.7528",
+      "distanceMeters": 1800,
+      "topCandidate": {
+        "type": "walking",
+        "probability": 0.95
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T00:30:00Z",
+    "endTime": "2026-01-15T01:00:00Z",
+    "timelinePath": [
+      {"point": "geo:35.6812,139.7671", "durationMinutesOffsetFromStartTime": 0},
+      {"point": "geo:35.6836,139.7600", "durationMinutesOffsetFromStartTime": 15},
+      {"point": "geo:35.6852,139.7528", "durationMinutesOffsetFromStartTime": 30}
+    ]
+  },
+  {
+    "startTime": "2026-01-15T01:00:00Z",
+    "endTime": "2026-01-15T02:00:00Z",
+    "visit": {
+      "topCandidate": {
+        "placeLocation": "geo:35.6852,139.7528",
+        "placeID": "synthetic:imperial-palace",
+        "semanticType": "Unknown",
+        "probability": 0.96
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T02:00:00Z",
+    "endTime": "2026-01-15T02:40:00Z",
+    "activity": {
+      "start": "geo:35.6812,139.7671",
+      "end": "geo:35.4662,139.6227",
+      "distanceMeters": 32000,
+      "topCandidate": {
+        "type": "in train",
+        "probability": 0.97
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T02:00:00Z",
+    "endTime": "2026-01-15T02:40:00Z",
+    "timelinePath": [
+      {"point": "geo:35.6812,139.7671", "durationMinutesOffsetFromStartTime": 0},
+      {"point": "geo:35.5625,139.7160", "durationMinutesOffsetFromStartTime": 20},
+      {"point": "geo:35.4662,139.6227", "durationMinutesOffsetFromStartTime": 40}
+    ]
+  },
+  {
+    "startTime": "2026-01-15T02:40:00Z",
+    "endTime": "2026-01-15T04:00:00Z",
+    "visit": {
+      "topCandidate": {
+        "placeLocation": "geo:35.4662,139.6227",
+        "placeID": "synthetic:yokohama-station",
+        "semanticType": "Unknown",
+        "probability": 0.98
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T04:00:00Z",
+    "endTime": "2026-01-15T04:45:00Z",
+    "activity": {
+      "start": "geo:35.4662,139.6227",
+      "end": "geo:35.3192,139.5467",
+      "distanceMeters": 26000,
+      "topCandidate": {
+        "type": "in passenger vehicle",
+        "probability": 0.93
+      }
+    }
+  },
+  {
+    "startTime": "2026-01-15T04:00:00Z",
+    "endTime": "2026-01-15T04:45:00Z",
+    "timelinePath": [
+      {"point": "geo:35.4662,139.6227", "durationMinutesOffsetFromStartTime": 0},
+      {"point": "geo:35.3935,139.5890", "durationMinutesOffsetFromStartTime": 22},
+      {"point": "geo:35.3192,139.5467", "durationMinutesOffsetFromStartTime": 45}
+    ]
+  },
+  {
+    "startTime": "2026-01-15T04:45:00Z",
+    "endTime": "2026-01-15T06:00:00Z",
+    "visit": {
+      "topCandidate": {
+        "placeLocation": "geo:35.3192,139.5467",
+        "placeID": "synthetic:kamakura-station",
+        "semanticType": "Unknown",
+        "probability": 0.97
+      }
+    }
+  }
+]

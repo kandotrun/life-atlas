@@ -1,0 +1,5 @@
+* text=auto eol=lf
+
+vendor/leaflet/* linguist-vendored
+worker-configuration.d.ts linguist-generated=true
+data/location-data.example.json linguist-generated=true
