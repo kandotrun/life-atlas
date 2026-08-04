@@ -24,7 +24,7 @@
   },
   "portless": "location-atlas",
   "dependencies": {
-    "hono": "^4.12.31",
+    "hono": "^4.12.34",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
